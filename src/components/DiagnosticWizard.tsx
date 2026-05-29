@@ -4,6 +4,12 @@ import { MEIDiagnosis, LeadData } from '../types';
 
 interface DiagnosticWizardProps {
   onDiagnosticComplete: (summaryText: string) => void;
+  data: MEIDiagnosis;
+  setData: React.Dispatch<React.SetStateAction<MEIDiagnosis>>;
+  lead: LeadData;
+  setLead: React.Dispatch<React.SetStateAction<LeadData>>;
+  aiReport: string;
+  setAiReport: (report: string) => void;
 }
 
 const INITIAL_DIAGNOSIS: MEIDiagnosis = {
@@ -21,11 +27,16 @@ const INITIAL_DIAGNOSIS: MEIDiagnosis = {
   hasStateIncentives: false,
 };
 
-export default function DiagnosticWizard({ onDiagnosticComplete }: DiagnosticWizardProps) {
+export default function DiagnosticWizard({ 
+  onDiagnosticComplete,
+  data,
+  setData,
+  lead,
+  setLead,
+  aiReport,
+  setAiReport
+}: DiagnosticWizardProps) {
   const [step, setStep] = useState(1);
-  const [data, setData] = useState<MEIDiagnosis>(INITIAL_DIAGNOSIS);
-  const [lead, setLead] = useState<LeadData>({ name: '', phone: '', cnpj: '', issueDescription: '' });
-  const [aiReport, setAiReport] = useState<string>('');
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 

@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import { DollarSign, ShieldAlert, BadgeInfo, Scale, TrendingUp, Sparkles, HelpCircle } from 'lucide-react';
 
-export default function DebtCalculator() {
-  const [monthsOwed, setMonthsOwed] = useState(5);
-  const [missedYears, setMissedYears] = useState(1);
+interface DebtCalculatorProps {
+  monthsOwed: number;
+  setMonthsOwed: (months: number) => void;
+  missedYears: number;
+  setMissedYears: (years: number) => void;
+}
+
+export default function DebtCalculator({
+  monthsOwed,
+  setMonthsOwed,
+  missedYears,
+  setMissedYears
+}: DebtCalculatorProps) {
 
   const getCalculation = () => {
     const dasCostPerMonth = 87.05; // standard updated for 2026

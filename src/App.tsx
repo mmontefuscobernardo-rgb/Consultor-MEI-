@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Sparkles, AlertTriangle, BadgeHelp, HelpCircle, CheckCircle, Scale, DollarSign, Calculator, MessageSquare, Landmark, ChevronDown, Award } from 'lucide-react';
+import { Shield, Sparkles, AlertTriangle, BadgeHelp, HelpCircle, CheckCircle, Scale, DollarSign, Calculator, MessageSquare, Landmark, ChevronDown, Award, FileText } from 'lucide-react';
 import InteractiveBanner from './components/InteractiveBanner';
 import DiagnosticWizard from './components/DiagnosticWizard';
 import DebtCalculator from './components/DebtCalculator';
 import AIConsultantChat from './components/AIConsultantChat';
 import MediaConfig from './components/MediaConfig';
-import { CustomMedia } from './types';
+import ConformityReport from './components/ConformityReport';
+import { CustomMedia, MEIDiagnosis, LeadData } from './types';
 
 export default function App() {
   // State for locally persistent media uploads (survives page refreshes!)
@@ -14,6 +15,79 @@ export default function App() {
     bannerUrl: '/banner.jpg',
     useGraphicMode: true,
   });
+
+  // Hoisted state for synchronization & report compilation
+  const [diagnosisData, setDiagnosisData] = useState<MEIDiagnosis>({
+    cnpjState: 'dont_know',
+    hasOwedDAS: false,
+    monthsOwedDAS: 0,
+    hasMissedDASN: false,
+    lastDASNYear: '',
+    annualBilling: 0,
+    legalIssues: {
+      hasFine: false,
+      hasExecution: false,
+      hasSocialBenefitsRisks: false,
+    },
+    hasStateIncentives: false,
+  });
+
+  const [leadData, setLeadData] = useState<LeadData>({
+    name: '',
+    phone: '',
+    cnpj: '',
+    issueDescription: ''
+  });
+
+  const [calculatorData, setCalculatorData] = useState({
+    monthsOwed: 5,
+    missedYears: 1
+  });
+
+  const [aiReport, setAiReport] = useState<string>('');
+
+  // Bi-directional synchronization between the Wizard states and Calculator states
+  useEffect(() => {
+    if (diagnosisData.hasOwedDAS && diagnosisData.monthsOwedDAS > 0) {
+      if (calculatorData.monthsOwed !== diagnosisData.monthsOwedDAS) {
+        setCalculatorData(c => ({ ...c, monthsOwed: diagnosisData.monthsOwedDAS }));
+      }
+    }
+  }, [diagnosisData.monthsOwedDAS, diagnosisData.hasOwedDAS]);
+
+  useEffect(() => {
+    if (calculatorData.monthsOwed > 0) {
+      if (diagnosisData.monthsOwedDAS !== calculatorData.monthsOwed || !diagnosisData.hasOwedDAS) {
+        setDiagnosisData(d => ({ ...d, hasOwedDAS: true, monthsOwedDAS: calculatorData.monthsOwed }));
+      }
+    } else {
+      if (diagnosisData.hasOwedDAS) {
+        setDiagnosisData(d => ({ ...d, hasOwedDAS: false, monthsOwedDAS: 0 }));
+      }
+    }
+  }, [calculatorData.monthsOwed]);
+
+  useEffect(() => {
+    if (diagnosisData.hasMissedDASN) {
+      const years = diagnosisData.lastDASNYear ? (2026 - parseInt(diagnosisData.lastDASNYear)) : 1;
+      const validYears = isNaN(years) || years < 0 ? 1 : years;
+      if (calculatorData.missedYears !== validYears) {
+        setCalculatorData(c => ({ ...c, missedYears: validYears }));
+      }
+    }
+  }, [diagnosisData.hasMissedDASN, diagnosisData.lastDASNYear]);
+
+  useEffect(() => {
+    if (calculatorData.missedYears > 0) {
+      if (!diagnosisData.hasMissedDASN) {
+        setDiagnosisData(d => ({ ...d, hasMissedDASN: true }));
+      }
+    } else {
+      if (diagnosisData.hasMissedDASN) {
+        setDiagnosisData(d => ({ ...d, hasMissedDASN: false }));
+      }
+    }
+  }, [calculatorData.missedYears]);
 
   // Load custom media from localstorage on start
   useEffect(() => {
@@ -112,10 +186,11 @@ export default function App() {
 
         {/* Quick Utilities Link Toolbar */}
         <nav id="top-navigation" className="hidden sm:flex items-center gap-5 text-xs text-stone-400">
-          <button onClick={() => scrollToSection('diagnostic-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer">Diagnóstico</button>
-          <button onClick={() => scrollToSection('calculator-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer">Calculadora</button>
-          <button onClick={() => scrollToSection('chat-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer">Consultor IA</button>
-          <button onClick={() => scrollToSection('faq-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer">Dúvidas Frequentes</button>
+          <button onClick={() => scrollToSection('diagnostic-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer font-medium">Diagnóstico</button>
+          <button onClick={() => scrollToSection('calculator-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer font-medium">Calculadora</button>
+          <button onClick={() => scrollToSection('report-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer font-bold text-emerald-400 hover:text-emerald-300">Dossiê PDF</button>
+          <button onClick={() => scrollToSection('chat-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer font-medium">Consultor IA</button>
+          <button onClick={() => scrollToSection('faq-hub')} className="hover:text-emerald-400 transition-colors cursor-pointer font-medium">Dúvidas Frequentes</button>
         </nav>
 
         <div>
@@ -201,7 +276,15 @@ export default function App() {
               Saiba exatamente o que está impedindo você de ficar regularizado de forma totalmente interativa.
             </p>
           </div>
-          <DiagnosticWizard onDiagnosticComplete={(txt) => console.log('D-Done', txt)} />
+          <DiagnosticWizard 
+            onDiagnosticComplete={(txt) => setAiReport(txt)} 
+            data={diagnosisData}
+            setData={setDiagnosisData}
+            lead={leadData}
+            setLead={setLeadData}
+            aiReport={aiReport}
+            setAiReport={setAiReport}
+          />
         </section>
 
         {/* Debt Calculator Section */}
@@ -218,7 +301,35 @@ export default function App() {
               Descubra os valores aproximados das guias DAS acumuladas em atrasos e faturas declaratórias antes de acertar com o fisco.
             </p>
           </div>
-          <DebtCalculator />
+          <DebtCalculator 
+            monthsOwed={calculatorData.monthsOwed}
+            setMonthsOwed={(m) => setCalculatorData(c => ({ ...c, monthsOwed: m }))}
+            missedYears={calculatorData.missedYears}
+            setMissedYears={(y) => setCalculatorData(c => ({ ...c, missedYears: y }))}
+          />
+        </section>
+
+        {/* Conformity Dossiê Section */}
+        <section
+          id="report-hub"
+          className={`space-y-4 transition-all duration-300 ${highlightedTool === 'report-hub' ? 'ring-2 ring-emerald-400 ring-offset-4 ring-offset-stone-950 rounded-2xl p-1' : ''}`}
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between px-2">
+            <div>
+              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans font-semibold">03. Dossiê Consolidado</span>
+              <h2 className="text-2xl font-bold font-display tracking-tight text-stone-100 mt-0.5">Relatório Oficial & PDF</h2>
+            </div>
+            <p className="text-xs text-stone-400 font-sans max-w-sm mt-1 md:mt-0 leading-relaxed text-left md:text-right">
+              Conecte suas simulações em um único dossiê formal de diagnóstico fiscal com exportação para PDF.
+            </p>
+          </div>
+          <ConformityReport
+            diagnosis={diagnosisData}
+            lead={leadData}
+            onUpdateLead={setLeadData}
+            aiReport={aiReport}
+            calculatorData={calculatorData}
+          />
         </section>
 
         {/* AI Clinic & FAQ (Split Bento grid segment) */}
@@ -230,7 +341,7 @@ export default function App() {
             className={`lg:col-span-7 space-y-4 transition-all duration-300 ${highlightedTool === 'chat-hub' ? 'ring-2 ring-emerald-400 ring-offset-4 ring-offset-stone-950 rounded-2xl p-1' : ''}`}
           >
             <div className="px-2">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans">03. Inteligência Artificial</span>
+              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans">04. Inteligência Artificial</span>
               <h2 className="text-2xl font-bold font-display tracking-tight text-stone-100 mt-0.5">Consultor Fiscal 24 Horas</h2>
               <p className="text-xs text-stone-400 mt-1 font-sans">
                 Tire suas dúvidas técnicas sobre DASN, parcelamento, CNPJ suspenso ou multas imediatamente com o cérebro virtual do escritório.
@@ -242,7 +353,7 @@ export default function App() {
           {/* FAQ Accordion Right Column */}
           <div id="faq-hub" className="lg:col-span-5 space-y-4">
             <div className="px-2">
-              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans font-semibold">04. Informações de Lei</span>
+              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans font-semibold">05. Informações de Lei</span>
               <h2 className="text-2xl font-bold font-display tracking-tight text-stone-100 mt-0.5">Dúvidas Resolvidas</h2>
               <p className="text-xs text-stone-400 mt-1 font-sans">
                 Entenda o regimento oficial do Ministério da Fazenda e as obrigações reais do seu microempreendimento.
