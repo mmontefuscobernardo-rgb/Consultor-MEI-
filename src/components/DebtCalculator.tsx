@@ -6,7 +6,7 @@ export default function DebtCalculator() {
   const [missedYears, setMissedYears] = useState(1);
 
   const getCalculation = () => {
-    const dasCostPerMonth = 75.0; // standard roughly estimated
+    const dasCostPerMonth = 87.05; // standard updated for 2026
     const principalDas = monthsOwed * dasCostPerMonth;
     const penaltyAndInterest = principalDas * 0.20; // estimate roughly max delay penalties (20% + interest)
     const dasnPenalty = missedYears * 50.0; // standard R$ 50 fine for each missed annual declaration

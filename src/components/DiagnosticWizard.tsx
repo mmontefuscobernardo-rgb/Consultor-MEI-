@@ -55,7 +55,7 @@ export default function DiagnosticWizard({ onDiagnosticComplete }: DiagnosticWiz
     }
 
     if (data.hasOwedDAS && data.monthsOwedDAS > 0) {
-      const approxDebt = data.monthsOwedDAS * 75.0; // approx DAS
+      const approxDebt = data.monthsOwedDAS * 87.05; // approx DAS in 2026
       estimateCost += approxDebt;
       risks.push(`Existência de ${data.monthsOwedDAS} guia(s) DAS pendente(s), com incidência de multa diária (0,33%/dia) e Juros SELIC.`);
       actions.push('Consolidar débitos do Simples Nacional no portal e-CAC para avaliação de parcelas.');
