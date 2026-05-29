@@ -49,51 +49,120 @@ export default function DebtCalculator({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Sliders Input */}
+        {/* Controls Input */}
         <div id="calc-inputs" className="space-y-6">
-          {/* Months Slider */}
+          {/* Months Input */}
           <div className="space-y-3 font-sans">
-            <div className="flex justify-between text-xs text-stone-300">
-              <span className="flex items-center gap-1">Boletos de DAS Atrasados:</span>
-              <span className="font-bold text-emerald-400">{monthsOwed} {monthsOwed === 1 ? 'mês' : 'meses'}</span>
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-stone-300 font-medium">Boletos de DAS Atrasados (Meses):</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setMonthsOwed(Math.max(0, monthsOwed - 1))}
+                  className="w-8 h-8 flex items-center justify-center bg-stone-800 hover:bg-stone-700 active:scale-95 text-emerald-400 font-bold rounded-lg border border-emerald-500/20 transition-all text-sm cursor-pointer select-none"
+                >
+                  -
+                </button>
+                <input
+                  id="calc-months-input"
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={monthsOwed}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    setMonthsOwed(isNaN(val) ? 0 : Math.max(0, val));
+                  }}
+                  className="w-16 h-8 bg-stone-900 border border-emerald-500/30 text-center text-xs font-bold text-emerald-400 rounded-lg outline-none focus:border-emerald-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setMonthsOwed(Math.min(120, monthsOwed + 1))}
+                  className="w-8 h-8 flex items-center justify-center bg-stone-800 hover:bg-stone-700 active:scale-95 text-emerald-400 font-bold rounded-lg border border-emerald-500/20 transition-all text-sm cursor-pointer select-none"
+                >
+                  +
+                </button>
+              </div>
             </div>
-            <input
-              id="calc-months-slider"
-              type="range"
-              min="0"
-              max="36"
-              value={monthsOwed}
-              onChange={(e) => setMonthsOwed(parseInt(e.target.value))}
-              className="w-full accent-emerald-500"
-            />
-            <div className="flex justify-between text-[10px] text-stone-500">
-              <span>Nenhum</span>
-              <span>1 ano (12m)</span>
-              <span>2 anos (24m)</span>
-              <span>3 anos (36m)</span>
+
+            {/* Quick Presets for Months */}
+            <div className="grid grid-cols-6 gap-1.5 pt-1">
+              {[0, 3, 6, 12, 24, 36].map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => setMonthsOwed(num)}
+                  className={`py-1.5 rounded-lg text-[9px] font-bold border transition-all cursor-pointer select-none ${
+                    monthsOwed === num
+                      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 font-extrabold scale-105'
+                      : 'bg-stone-900/80 text-stone-300 border-emerald-500/10 hover:border-emerald-500/30 hover:bg-stone-800'
+                  }`}
+                >
+                  {num === 0 ? '0m' : `${num}m`}
+                </button>
+              ))}
             </div>
+            
+            <p className="text-[10px] text-stone-500 leading-normal">
+              Ajuste nos botões acima, digite ou selecione um dos atalhos rápidos de meses.
+            </p>
           </div>
 
-          {/* DASN Slider */}
-          <div className="space-y-3 font-sans pt-2 border-t border-emerald-500/10">
-            <div className="flex justify-between text-xs text-stone-300">
-              <span className="flex items-center gap-1">Declarações Anuais (DASN) Pendentes:</span>
-              <span className="font-bold text-emerald-400">{missedYears} {missedYears === 1 ? 'ano' : 'anos'}</span>
+          {/* DASN Input */}
+          <div className="space-y-3 font-sans pt-4 border-t border-emerald-500/10">
+            <div className="flex justify-between items-center">
+              <span className="text-xs text-stone-300 font-medium font-sans">Declarações Anuais (DASN) Pendentes:</span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setMissedYears(Math.max(0, missedYears - 1))}
+                  className="w-8 h-8 flex items-center justify-center bg-stone-800 hover:bg-stone-700 active:scale-95 text-emerald-400 font-bold rounded-lg border border-emerald-500/20 transition-all text-sm cursor-pointer select-none"
+                >
+                  -
+                </button>
+                <input
+                  id="calc-years-input"
+                  type="number"
+                  min="0"
+                  max="10"
+                  value={missedYears}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    setMissedYears(isNaN(val) ? 0 : Math.max(0, val));
+                  }}
+                  className="w-16 h-8 bg-stone-900 border border-emerald-500/30 text-center text-xs font-bold text-emerald-400 rounded-lg outline-none focus:border-emerald-400"
+                />
+                <button
+                  type="button"
+                  onClick={() => setMissedYears(Math.min(10, missedYears + 1))}
+                  className="w-8 h-8 flex items-center justify-center bg-stone-800 hover:bg-stone-700 active:scale-95 text-emerald-400 font-bold rounded-lg border border-emerald-500/20 transition-all text-sm cursor-pointer select-none"
+                >
+                  +
+                </button>
+              </div>
             </div>
-            <input
-              id="calc-years-slider"
-              type="range"
-              min="0"
-              max="5"
-              value={missedYears}
-              onChange={(e) => setMissedYears(parseInt(e.target.value))}
-              className="w-full accent-emerald-500"
-            />
-            <div className="flex justify-between text-[10px] text-stone-500">
-              <span>Em dia</span>
-              <span>3 anos pendentes</span>
-              <span>5 anos pendentes</span>
+
+            {/* Quick Presets for Years */}
+            <div className="grid grid-cols-6 gap-1.5 pt-1">
+              {[0, 1, 2, 3, 4, 5].map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  onClick={() => setMissedYears(num)}
+                  className={`py-1.5 rounded-lg text-[9px] font-bold border transition-all cursor-pointer select-none ${
+                    missedYears === num
+                      ? 'bg-emerald-500 text-emerald-950 border-emerald-400 font-extrabold scale-105'
+                      : 'bg-stone-900/80 text-stone-300 border-emerald-500/10 hover:border-emerald-500/30 hover:bg-stone-800'
+                  }`}
+                >
+                  {num === 0 ? '0 anos' : `${num} ${num === 1 ? 'ano' : 'anos'}`}
+                </button>
+              ))}
             </div>
+
+            <p className="text-[10px] text-stone-500 leading-normal">
+              Número de anos em falta sem declarar a DASN-SIMEI anual.
+            </p>
           </div>
 
           {/* Quick Legal context */}
