@@ -1,0 +1,6 @@
+{
+  "name": "Consultor MEI - Marcello Bernardo",
+  "description": "Consultoria especializada e diagnóstico inteligente por inteligência artificial para regularização de débitos e situação fiscal de MEIs com o especialista Marcello Bernardo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
