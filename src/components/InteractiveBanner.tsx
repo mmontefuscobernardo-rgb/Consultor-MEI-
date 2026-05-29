@@ -8,7 +8,21 @@ interface InteractiveBannerProps {
 }
 
 export default function InteractiveBanner({ customMedia, onNavigateToTab }: InteractiveBannerProps) {
-  const isGraphic = !!customMedia.bannerUrl && !!customMedia.useGraphicMode;
+  const [photoError, setPhotoError] = React.useState(false);
+  const [bannerError, setBannerError] = React.useState(false);
+
+  // Reset errors if customMedia changes
+  React.useEffect(() => {
+    setPhotoError(false);
+  }, [customMedia.photoUrl]);
+
+  React.useEffect(() => {
+    setBannerError(false);
+  }, [customMedia.bannerUrl]);
+
+  const hasBanner = !!customMedia.bannerUrl && !bannerError;
+  const hasPhoto = !!customMedia.photoUrl && !photoError;
+  const isGraphic = hasBanner && !!customMedia.useGraphicMode;
 
   return (
     <div
@@ -17,7 +31,7 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
         isGraphic ? 'aspect-[27/10] lg:aspect-auto lg:min-h-[500px]' : 'min-h-[500px]'
       }`}
       style={{
-        background: customMedia.bannerUrl
+        background: hasBanner
           ? isGraphic
             ? `url(${customMedia.bannerUrl}) no-referrer center center / cover`
             : `linear-gradient(135deg, rgba(2, 26, 17, 0.95) 0%, rgba(2, 40, 24, 0.85) 100%), url(${customMedia.bannerUrl}) no-referrer center center / cover`
@@ -25,7 +39,7 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
       }}
     >
       {/* Recreated Dynamic Concentric Orbits (Slightly Pulsing & Rotating) */}
-      {!customMedia.bannerUrl && !isGraphic && (
+      {!hasBanner && !isGraphic && (
         <div id="concentric-orbits-background" className="absolute left-0 top-0 bottom-0 right-0 w-full h-full pointer-events-none overflow-hidden">
           <div className="absolute left-[-150px] top-[calc(50%-250px)] w-[500px] h-[500px] rounded-full border border-emerald-500/10 animated-glow-circle" />
           <div className="absolute left-[-100px] top-[calc(50%-200px)] w-[400px] h-[400px] rounded-full border border-emerald-500/20 animated-glow-circle" style={{ animationDelay: '1s' }} />
@@ -63,52 +77,94 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
 
             {/* Profile Avatar Canvas */}
             <div className="w-[190px] h-[190px] rounded-full overflow-hidden border-2 border-emerald-400 shadow-xl bg-emerald-990 flex items-center justify-center z-10 relative">
-              {customMedia.photoUrl ? (
+              {hasPhoto ? (
                 <img
                   id="custom-marcello-avatar"
-                  src={customMedia.photoUrl}
+                  src={customMedia.photoUrl || ''}
                   alt="Marcello Montefusco Bernardo"
                   referrerPolicy="no-referrer"
+                  onError={() => setPhotoError(true)}
                   className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />
               ) : (
-                /* Native Vector Profile Representation - Matches Bald Marcello with Grey gradient */
+                /* Native Vector Profile Representation - Masterfully Stylized Bald Marcello in Signature Hand-on-Chin Pose */
                 <svg
                   id="vector-marcello-avatar"
                   viewBox="0 0 200 200"
-                  className="w-full h-full bg-gradient-to-tr from-stone-800 to-stone-600"
+                  className="w-full h-full bg-gradient-to-tr from-[#315143] to-[#041a10]"
                 >
                   <defs>
                     <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#dcb392" />
-                      <stop offset="100%" stopColor="#9a6e4d" />
+                      <stop offset="0%" stopColor="#efc19f" />
+                      <stop offset="60%" stopColor="#d59a72" />
+                      <stop offset="100%" stopColor="#b57248" />
                     </linearGradient>
                     <linearGradient id="shirtGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#1e293b" />
-                      <stop offset="100%" stopColor="#0f172a" />
+                      <stop offset="0%" stopColor="#1a202c" />
+                      <stop offset="100%" stopColor="#0d1117" />
                     </linearGradient>
                   </defs>
+                  
+                  {/* Studio Gray/Green Backdrop Highlight */}
+                  <circle cx="100" cy="100" r="95" fill="#1b2a22" opacity="0.4" />
+                  <circle cx="100" cy="110" r="60" fill="#2d4a3c" opacity="0.2" />
+
                   {/* Shoulders / Shirt */}
-                  <path d="M40,200 L160,200 C160,165 150,135 125,120 C115,125 105,126 100,126 C95,126 85,125 75,120 C50,135 40,165 40,200 Z" fill="url(#shirtGrad)" />
+                  <path d="M30,200 L170,200 C170,165 155,135 130,121 C118,125 106,127 100,127 C94,127 82,125 70,121 C45,135 30,165 30,200 Z" fill="url(#shirtGrad)" />
+                  <path d="M72,122 C82,130 118,130 128,122" stroke="#2d3748" strokeWidth="2.5" fill="none" />
+                  
                   {/* Neck */}
-                  <path d="M85,115 L115,115 L112,135 L88,135 Z" fill="#9a6e4d" />
-                  {/* Bald Head / Ears */}
-                  <circle cx="80" cy="95" r="10" fill="#9a6e4d" />
-                  <circle cx="120" cy="95" r="10" fill="#9a6e4d" />
-                  <path d="M70,95 C70,55 130,55 130,95 C130,125 70,125 70,95 Z" fill="url(#skinGrad)" />
-                  {/* Symmetrical beard detail / chin shadow */}
-                  <path d="M72,95 C75,115 125,115 128,95 C120,122 80,122 72,95 Z" fill="#5c3f2b" opacity="0.4" />
-                  {/* Closed mouth */}
-                  <path d="M92,112 L108,112" stroke="#5c3f2b" strokeWidth="2" strokeLinecap="round" />
-                  {/* Subtle eyes and eyebrows */}
-                  <path d="M80,84 C85,82 90,83 93,85" stroke="#3b2314" strokeWidth="2" strokeLinecap="round" fill="none" />
-                  <path d="M120,84 C115,82 110,83 107,85" stroke="#3b2314" strokeWidth="2" strokeLinecap="round" fill="none" />
-                  <circle cx="86" cy="90" r="3" fill="#2d170b" />
-                  <circle cx="114" cy="90" r="3" fill="#2d170b" />
-                  <circle cx="87.5" cy="88.5" r="1" fill="#ffffff" />
-                  <circle cx="115.5" cy="88.5" r="1" fill="#ffffff" />
-                  {/* Subtle nose */}
-                  <path d="M97,93 L100,101 L103,93" stroke="#8d5f3f" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                  <path d="M84,111 L116,111 L113,132 L87,132 Z" fill="#9a5e37" />
+                  <path d="M84,111 C90,122 110,122 116,111" stroke="#754320" strokeWidth="1.5" fill="none" opacity="0.3" />
+
+                  {/* Ears */}
+                  <circle cx="68" cy="91" r="9" fill="#c48a60" />
+                  <circle cx="132" cy="91" r="9" fill="#c48a60" />
+
+                  {/* Elegant Head Oval (Bald Marcello) */}
+                  <path d="M68,89 C68,44 132,44 132,89 C132,121 68,121 68,89 Z" fill="url(#skinGrad)" />
+
+                  {/* Goatee and Stubble (Goatee style matching real photo) */}
+                  <path d="M71,94 C74,121 126,121 129,94 C123,124 77,124 71,94 Z" fill="#1f2937" opacity="0.65" />
+                  
+                  {/* Mustache block */}
+                  <path d="M84,103 C93,99 107,99 116,103 C119,111 81,111 84,103 Z" fill="#111827" opacity="0.75" />
+
+                  {/* Friendly closed mouth */}
+                  <path d="M91,113 C95,116 105,116 109,113" stroke="#991b1b" strokeWidth="2" strokeLinecap="round" fill="none" />
+
+                  {/* Mustache fine arch */}
+                  <path d="M85,106 C92,102 108,102 115,106" stroke="#0f172a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+
+                  {/* Expressive Eyebrows */}
+                  <path d="M76,80 C81,77 87,77 91,80" stroke="#1f2937" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                  <path d="M109,80 C113,77 119,77 124,80" stroke="#1f2937" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+
+                  {/* Symmetrical Smiling Eyes */}
+                  <path d="M77,87 C80,85 86,85 89,87" stroke="#0f172a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                  <circle cx="83.5" cy="90" r="2.8" fill="#111827" />
+                  <circle cx="84.5" cy="89" r="0.8" fill="#ffffff" />
+
+                  <path d="M111,87 C114,85 120,85 123,87" stroke="#0f172a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+                  <circle cx="116.5" cy="90" r="2.8" fill="#111827" />
+                  <circle cx="117.5" cy="89" r="0.8" fill="#ffffff" />
+
+                  {/* Nose outline */}
+                  <path d="M96,93 L100,101 L104,93" stroke="#8c4e2a" strokeWidth="2.2" strokeLinecap="round" fill="none" />
+
+                  {/* Stylized Vector Hand on Chin (Thinking pose representing the uploaded portrait!) */}
+                  <g id="vector-hand-pose" opacity="0.95">
+                    {/* Shadow where hand touches neck */}
+                    <path d="M85,138 C100,136 115,142 118,154 C100,162 82,154 85,138 Z" fill="#754320" opacity="0.4" />
+                    {/* Hand base/palm resting at custom height */}
+                    <path d="M86,139 C88,131 98,124 104,124 C108,124 118,127 121,136 C123,142 121,154 102,159 Z" fill="url(#skinGrad)" stroke="#754320" strokeWidth="1.2" />
+                    {/* Index finger resting on side of chin */}
+                    <path d="M96,128 C101,126 106,127 108,131 C109,133 108,136 104,136 L97,134" stroke="#754320" strokeWidth="1.8" strokeLinecap="round" fill="#d59a72" />
+                    {/* Middle finger detail folded below index */}
+                    <path d="M99,134 C103,132 107,133 108,137 C109,138 107,141 103,140" stroke="#754320" strokeWidth="1.8" strokeLinecap="round" fill="#d59a72" />
+                    {/* Thumb wrapped around throat/lower jawline */}
+                    <path d="M84,136 C82,141 87,145 92,143" stroke="#754320" strokeWidth="2" strokeLinecap="round" fill="#b57248" />
+                  </g>
                 </svg>
               )}
             </div>

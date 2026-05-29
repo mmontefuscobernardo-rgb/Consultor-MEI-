@@ -10,9 +10,9 @@ import { CustomMedia } from './types';
 export default function App() {
   // State for locally persistent media uploads (survives page refreshes!)
   const [customMedia, setCustomMedia] = useState<CustomMedia>({
-    photoUrl: null,
-    bannerUrl: null,
-    useGraphicMode: false,
+    photoUrl: '/photo.jpg',
+    bannerUrl: '/banner.jpg',
+    useGraphicMode: true,
   });
 
   // Load custom media from localstorage on start
@@ -20,11 +20,16 @@ export default function App() {
     try {
       const storedPhoto = localStorage.getItem('marcello_mei_custom_photo');
       const storedBanner = localStorage.getItem('marcello_mei_custom_banner');
-      const storedMode = localStorage.getItem('marcello_mei_use_graphic_mode') === 'true';
+      const storedMode = localStorage.getItem('marcello_mei_use_graphic_mode');
+      
+      const photoUrl = storedPhoto === 'none' ? null : (storedPhoto || '/photo.jpg');
+      const bannerUrl = storedBanner === 'none' ? null : (storedBanner || '/banner.jpg');
+      const useGraphicMode = storedMode !== null ? storedMode === 'true' : true;
+
       setCustomMedia({
-        photoUrl: storedPhoto,
-        bannerUrl: storedBanner,
-        useGraphicMode: storedMode,
+        photoUrl,
+        bannerUrl,
+        useGraphicMode,
       });
     } catch (e) {
       console.error('Failed to read media from localStorage', e);
@@ -34,11 +39,17 @@ export default function App() {
   const handleUpdateMedia = (photo: string | null, banner: string | null, useGraphicMode?: boolean) => {
     setCustomMedia({ photoUrl: photo, bannerUrl: banner, useGraphicMode });
     try {
-      if (photo) localStorage.setItem('marcello_mei_custom_photo', photo);
-      else localStorage.removeItem('marcello_mei_custom_photo');
+      if (photo) {
+        localStorage.setItem('marcello_mei_custom_photo', photo);
+      } else {
+        localStorage.setItem('marcello_mei_custom_photo', 'none');
+      }
 
-      if (banner) localStorage.setItem('marcello_mei_custom_banner', banner);
-      else localStorage.removeItem('marcello_mei_custom_banner');
+      if (banner) {
+        localStorage.setItem('marcello_mei_custom_banner', banner);
+      } else {
+        localStorage.setItem('marcello_mei_custom_banner', 'none');
+      }
 
       localStorage.setItem('marcello_mei_use_graphic_mode', useGraphicMode ? 'true' : 'false');
     } catch (e) {
