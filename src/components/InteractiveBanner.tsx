@@ -174,7 +174,45 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
         {/* Right Column: Copywriting, Badges, CTA */}
         <div id="hero-info-area" className={`lg:col-span-8 space-y-8 lg:space-y-6 text-center lg:text-left transition-all duration-300 w-full pt-4 lg:pt-0 ${isGraphic ? 'py-4 lg:py-0' : ''}`}>
           
-          {!isGraphic ? (
+          {isGraphic ? (
+            /* Elegant credentials card shown next to photo to fill the empty space in graphic/banner mode */
+            <div id="marcello-credentials-card" className="flex flex-col gap-4 text-left font-sans max-w-xl mx-auto lg:mx-0 bg-stone-950/85 border border-emerald-500/30 p-5 rounded-2xl shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="border-b border-emerald-500/25 pb-3">
+                <div className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-950 border border-emerald-500/20 rounded-full text-[9px] text-emerald-400 font-extrabold tracking-wider uppercase mb-1.5">
+                  <Sparkles className="w-2.5 h-2.5 fill-emerald-400 animate-pulse" />
+                  Especialista de confiança
+                </div>
+                <h3 className="text-lg font-bold text-stone-100 flex items-center gap-1.5 mt-0.5">
+                  Marcello Bernardo 
+                  <BadgeCheck className="w-5 h-5 text-emerald-400 fill-emerald-950 flex-shrink-0" />
+                </h3>
+                <p className="text-xs text-stone-300 font-medium">Soluções Tributárias Inteligentes para Microempreendedores individuais</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs leading-normal">
+                <div className="flex items-start gap-1.5 text-stone-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0 animate-pulse" />
+                  <span><strong>Regularização Cadastral</strong>: Ative seu CNPJ Suspenso ou Inapto perante a Receita Federal.</span>
+                </div>
+                <div className="flex items-start gap-1.5 text-stone-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0 animate-pulse" />
+                  <span><strong>Parcelamento Suave (60x)</strong>: Negociação de débitos acumulados com mensalidades acessíveis.</span>
+                </div>
+                <div className="flex items-start gap-1.5 text-stone-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0 animate-pulse" />
+                  <span><strong>Declaração DASN Anual</strong>: Transmissão oficial de faturamento sem erros ou dores de cabeça.</span>
+                </div>
+                <div className="flex items-start gap-1.5 text-stone-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0 animate-pulse" />
+                  <span><strong>Blindagem do seu CPF</strong>: Evite que dívidas de imposto paradas afetem o seu nome pessoal.</span>
+                </div>
+              </div>
+              <div className="text-[10px] text-emerald-300/90 border-t border-emerald-500/10 pt-2 flex items-center gap-1 bg-emerald-950/20 px-2 py-1 rounded-lg">
+                <span className="font-bold">✓ +1.200 MEIs Regularizados</span>
+                <span className="text-stone-500">•</span>
+                <span>Garantia de conformidade tributária e segurança contratual</span>
+              </div>
+            </div>
+          ) : (
             <>
               <div className="flex justify-center lg:justify-start">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-900/50 border border-emerald-400/30 rounded-full text-[10px] md:text-xs text-emerald-300 font-semibold tracking-wider font-sans uppercase">
@@ -220,9 +258,6 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
                 </div>
               </div>
             </>
-          ) : (
-            /* Spacer to align photo on graphic mode background properly */
-            <div className="hidden lg:block h-[120px]" />
           )}
 
           {/* Core Call-to-action */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Sparkles, AlertTriangle, BadgeHelp, HelpCircle, CheckCircle, Scale, DollarSign, Calculator, MessageSquare, Landmark, ChevronDown, Award, FileText } from 'lucide-react';
+import { Shield, Sparkles, AlertTriangle, BadgeHelp, HelpCircle, CheckCircle, Scale, DollarSign, Calculator, MessageSquare, Landmark, ChevronDown, Award, FileText, XCircle, TrendingUp, AlertCircle, RefreshCw, UserCheck } from 'lucide-react';
 import InteractiveBanner from './components/InteractiveBanner';
 import DiagnosticWizard from './components/DiagnosticWizard';
 import DebtCalculator from './components/DebtCalculator';
@@ -260,6 +260,150 @@ export default function App() {
               <p className="text-[10px] text-stone-400 mt-1">Converse com o robô especialista treinado com a assessoria do Marcello.</p>
             </div>
           </button>
+        </section>
+
+        {/* Comparative "Antes vs Depois" Section - Massive UX & Trust Booster */}
+        <section id="comparison-segment" className="space-y-6 bg-stone-900/40 p-6 md:p-8 rounded-3xl border border-emerald-500/10 backdrop-blur-md">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <div className="flex justify-center">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-950 border border-emerald-500/10 rounded-full text-[10px] uppercase font-bold text-emerald-400 tracking-wider font-sans">
+                🛡️ Segurança e Proteção
+              </span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold font-display text-stone-100 tracking-tight">
+              O Impacto Real de Regularizar o seu MEI
+            </h2>
+            <p className="text-xs text-stone-400 font-sans leading-relaxed">
+              Descubra por que estar fora de conformidade com a Receita Federal sabota seu negócio e como a assessoria profissional do Marcello reabilita seus caminhos comerciais.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 font-sans">
+            {/* INADIMPLENTE / RISCOS CARD */}
+            <div className="flex flex-col bg-red-950/15 border border-red-550/15 rounded-2xl p-5 md:p-6 space-y-5 shadow-inner">
+              <div className="flex items-center gap-3 border-b border-red-500/10 pb-3">
+                <div className="p-2.5 bg-red-500/10 text-red-400 rounded-xl">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-red-200 uppercase tracking-wider">CNPJ Irregular ou Omissor</h3>
+                  <p className="text-[10px] text-red-400 font-medium">As restrições sérias que travam a sua vida e seu CPF</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs">
+                <div className="flex gap-3">
+                  <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Previdência do INSS Bloqueada</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Seus meses atrasados não contam para aposentadoria por idade, auxílio-doença, licenças médicas ou salário-maternidade em emergências.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Cobranças Ativas no seu CPF</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">As dívidas do CNPJ não desaparecem sozinhos; a Receita Federal as inscreve na Dívida Ativa da União e suja o seu CPF pessoal.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Emissão de Notas Fiscais Impedida</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Omissão de declarações DASN-SIMEI por mais de 2 anos bloqueia seu cadastro na SEFAZ municipais/estaduais, suspendendo o faturamento.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <XCircle className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Contas Bancárias de PJ Bloqueadas</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Bancos e instituições de crédito bloqueiam a movimentação de recursos e revogam limites especiais em contas com CNPJ irregular.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* REGULARIZADO / SUCESSO CARD */}
+            <div className="flex flex-col bg-emerald-950/15 border border-emerald-500/20 rounded-2xl p-5 md:p-6 space-y-5 shadow-lg">
+              <div className="flex items-center gap-3 border-b border-emerald-500/10 pb-3">
+                <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl">
+                  <Shield className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-emerald-300 uppercase tracking-wider animate-pulse">CNPJ Regularizado</h3>
+                  <p className="text-[10px] text-emerald-400 font-medium">Os privilégios de ter uma empresa blindada e limpa</p>
+                </div>
+              </div>
+
+              <div className="space-y-4 text-xs">
+                <div className="flex gap-3">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Cobertura Integral da Previdência</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Garantia jurídica de acesso a todos os benefícios oficiais do INSS para você e proteção para seus dependentes familiares.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">CPF Limpo e Blindagem Patrimonial</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Extinção de juros abusivos e retirada de pendências judiciais de execução fiscal no seu Cadastro de Pessoas Físicas pessoal.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Faturamento e Notas Fiscais 100% Livres</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Livre emissão de notas fiscais eletrônicas de comércio, indústria ou serviço, abrindo portas comerciais para grandes clientes corporativos.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <CheckCircle className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className="font-bold text-stone-200">Acesso a Crédito de Juros Baixos</h4>
+                    <p className="text-stone-400 text-[11px] mt-0.5 leading-normal">Abertura de financiamentos governamentais para PJ (como o Pronampe) com taxas exclusivas para microempresas organizadas.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-emerald-950/20 border border-emerald-500/10 rounded-2xl">
+            <div className="flex items-center gap-3 text-left">
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-emerald-500/20 bg-stone-900 flex items-center justify-center">
+                {customMedia.photoUrl ? (
+                  <img
+                    src={customMedia.photoUrl}
+                    alt="Marcello Bernardo"
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="text-emerald-400 font-bold text-xs uppercase">MB</div>
+                )}
+              </div>
+              <div>
+                <p className="text-xs font-bold text-stone-100 font-sans">Evite surpresas fiscais que travem seu patrimônio</p>
+                <p className="text-[10px] text-stone-400 leading-normal">Faça agora mesmo a simulação abaixo e envie direto para análise do Marcello no WhatsApp.</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => scrollToSection('diagnostic-hub')}
+              className="w-full sm:w-auto px-5 py-2.5 bg-emerald-450 hover:bg-emerald-350 text-emerald-950 font-extrabold text-xs rounded-xl uppercase tracking-wider transition-all duration-300 cursor-pointer active:scale-95"
+            >
+              Começar Diagnóstico Grátis
+            </button>
+          </div>
         </section>
 
         {/* Diagnostic Wizard Core Section */}
