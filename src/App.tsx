@@ -6,6 +6,7 @@ import DebtCalculator from './components/DebtCalculator';
 import AIConsultantChat from './components/AIConsultantChat';
 import MediaConfig from './components/MediaConfig';
 import ConformityReport from './components/ConformityReport';
+import DebtReportSection from './components/DebtReportSection';
 import { CustomMedia, MEIDiagnosis, LeadData } from './types';
 
 export default function App() {
@@ -405,6 +406,9 @@ export default function App() {
             </button>
           </div>
         </section>
+
+        {/* PGFN Government Report Highlight */}
+        <DebtReportSection />
 
         {/* Diagnostic Wizard Core Section */}
         <section

@@ -28,7 +28,7 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
     <div
       id="hero-banner-area"
       className={`relative w-full rounded-3xl overflow-hidden border border-emerald-500/20 shadow-2xl transition-all duration-300 select-none flex items-center ${
-        isGraphic ? 'aspect-[27/10] lg:aspect-auto lg:min-h-[500px]' : 'min-h-[500px]'
+        isGraphic ? 'min-h-[580px] sm:min-h-[550px] lg:min-h-[500px]' : 'min-h-[500px]'
       }`}
       style={{
         background: hasBanner
@@ -55,8 +55,8 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
       {/* Grid Layout conforming to User Banner Blueprint */}
       <div 
         id="hero-banner-grid" 
-        className={`relative z-10 w-full px-6 py-12 md:py-14 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center ${
-          isGraphic ? 'h-full flex flex-col justify-end lg:grid' : ''
+        className={`relative z-10 w-full px-6 py-8 md:py-14 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center ${
+          isGraphic ? 'h-full flex flex-col justify-center lg:grid' : ''
         }`}
       >
         
@@ -65,7 +65,7 @@ export default function InteractiveBanner({ customMedia, onNavigateToTab }: Inte
           id="hero-avatar-area" 
           className={`lg:col-span-4 flex justify-center lg:justify-start w-full transition-all duration-300 ${
             isGraphic 
-              ? 'scale-50 sm:scale-75 md:scale-90 lg:scale-100 origin-center lg:-translate-x-2' 
+              ? 'scale-90 sm:scale-95 lg:scale-100 origin-center lg:-translate-x-2' 
               : ''
           }`}
         >
